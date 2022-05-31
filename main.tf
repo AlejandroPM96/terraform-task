@@ -137,6 +137,9 @@ module "gce-lb-http" {
 # [END cloudloadbalancing_ext_http_gce]
 
 resource "google_compute_instance" "default" {
+  depends_on = [
+    google_compute_subnetwork.group1
+  ]
   name         = "jump-server"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
@@ -148,16 +151,28 @@ resource "google_compute_instance" "default" {
   }
 
   network_interface {
+    network = var.network_prefix
     subnetwork = "${var.network_prefix}-group1"
     access_config {
       // Ephemeral public IP
     }
   }
-  network_interface {
-    subnetwork = "${var.network_prefix}-group2"
-    access_config {
-      // Ephemeral public IP
-    }
+  tags = ["jump-server"]
+}
+resource "google_compute_firewall" "rules" {
+  depends_on = [
+    google_compute_subnetwork.group1
+  ]
+  name = "allow-ssh"
+  network = var.network_prefix
+  allow {
+    protocol = "tcp"
+    ports = ["22"]
   }
-  tags = [ "jump-server" ]
+  target_tags = ["jump-server"]
+  source_ranges = ["0.0.0.0/0"]
+}
+
+output "load-balancer-ip" {
+  value = module.gce-lb-http.external_ip
 }

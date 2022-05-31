@@ -1,10 +1,10 @@
 variable "project" {
-  type = string
+  type    = string
   default = "terraform-351519"
 }
 
-variable "credentials_file" { 
-  type = string
+variable "credentials_file" {
+  type    = string
   default = "../terraform-351519-db745207ceec.json"
 }
 
@@ -29,6 +29,6 @@ variable "network_prefix" {
 }
 
 variable "script_path" {
-  type        = string
+  type    = string
   default = "./startup.sh"
 }
