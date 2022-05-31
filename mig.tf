@@ -23,10 +23,11 @@ module "mig1_template" {
   source_image_project = "ubuntu-os-cloud"
   tags = [
     "${var.network_prefix}-group1",
-    module.cloud-nat-group1.router_name
+    module.cloud-nat-group1.router_name,
+    "allow-ssh"
   ]
   metadata = {
-    ssh-keys = "JUMPSERVER:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCYnKJUsLsSWhxgR9qcsxoxKDAp5RmkvXJcyL+XdBwFQLjAQ3ExIy5Q9hHxw9t9Rj0lYlMUotS/kN8I7RoX5Ly8z72Ni2B8j3/rXycQmHXLith5CG+Co6Cs3bEdmCiX+6BGbA+wbC9Kg2Ln69kUF6aUhsFDw9SmXMXO80DB1LIW1LhBSOSuknTcE1+CfcbV1id1q5A7Z+hsDeHy+DYAN6tR5BAVgecdpS1QZVfDc2QLNdX89W2UWdjKE6ASTNbsTpzv6ktk7Blt0LAKiRQZxy/A64SzK9YwS6GObtfzO6KCulXZdbBgmpyVKhqyCvPdo7/mdBIVS1e99F5uMUFfHthJ JUMPSERVER"
+    ssh-keys = var.public_ssh
   }
 }
 
@@ -40,6 +41,10 @@ module "mig1" {
   named_ports = [{
     name = "http",
     port = 80
+    },
+    {
+      name = "ssh",
+      port = 22
   }]
   network    = google_compute_network.default.self_link
   subnetwork = google_compute_subnetwork.group1.self_link
@@ -60,10 +65,11 @@ module "mig2_template" {
   source_image_project = "ubuntu-os-cloud"
   tags = [
     "${var.network_prefix}-group1",
-    module.cloud-nat-group1.router_name
+    module.cloud-nat-group1.router_name,
+    "allow-ssh"
   ]
   metadata = {
-    ssh-keys = "JUMPSERVER:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCYnKJUsLsSWhxgR9qcsxoxKDAp5RmkvXJcyL+XdBwFQLjAQ3ExIy5Q9hHxw9t9Rj0lYlMUotS/kN8I7RoX5Ly8z72Ni2B8j3/rXycQmHXLith5CG+Co6Cs3bEdmCiX+6BGbA+wbC9Kg2Ln69kUF6aUhsFDw9SmXMXO80DB1LIW1LhBSOSuknTcE1+CfcbV1id1q5A7Z+hsDeHy+DYAN6tR5BAVgecdpS1QZVfDc2QLNdX89W2UWdjKE6ASTNbsTpzv6ktk7Blt0LAKiRQZxy/A64SzK9YwS6GObtfzO6KCulXZdbBgmpyVKhqyCvPdo7/mdBIVS1e99F5uMUFfHthJ JUMPSERVER"
+    ssh-keys = var.public_ssh
   }
 }
 
@@ -77,6 +83,10 @@ module "mig2" {
   named_ports = [{
     name = "http",
     port = 80
+    },
+    {
+      name = "tcp",
+      port = 22
   }]
   network    = google_compute_network.default.self_link
   subnetwork = google_compute_subnetwork.group1.self_link

@@ -149,9 +149,10 @@ resource "google_compute_instance" "default" {
       image = "debian-cloud/debian-9"
     }
   }
+  metadata_startup_script = file("jump_script.sh")
 
   network_interface {
-    network = var.network_prefix
+    network    = var.network_prefix
     subnetwork = "${var.network_prefix}-group1"
     access_config {
       // Ephemeral public IP
@@ -163,14 +164,29 @@ resource "google_compute_firewall" "rules" {
   depends_on = [
     google_compute_subnetwork.group1
   ]
-  name = "allow-ssh"
+  name    = "allow-ssh"
   network = var.network_prefix
   allow {
     protocol = "tcp"
-    ports = ["22"]
+    ports    = ["22"]
   }
-  target_tags = ["jump-server"]
+  target_tags   = ["jump-server"]
   source_ranges = ["0.0.0.0/0"]
+}
+
+resource "google_compute_firewall" "allow_ssh" {
+  depends_on = [
+    google_compute_subnetwork.group1
+  ]
+  name          = "allow-ssh-internal"
+  network       = var.network_prefix
+  target_tags   = ["allow-ssh"] // this targets our tagged VM
+  source_ranges = ["0.0.0.0/0"]
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
 }
 
 output "load-balancer-ip" {
