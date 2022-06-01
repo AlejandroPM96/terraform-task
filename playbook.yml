@@ -24,14 +24,23 @@
   hosts: dbservers
   become: true
   tasks:
-    - name: get apt key
-      apt_key: 
-        url: "https://www.mongodb.org/static/pgp/server-5.0.asc"
+    - name: "Import MongoDB public key"
+      apt_key:
+        keyserver: hkp://keyserver.ubuntu.com:80
+        id: 4B7C549A058F8B6B
 
-    - name: create mongodb-org-3.2.list
-      command: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+    - name: "Add MongoDB repository"
+      apt_repository:
+        filename: '/etc/apt/sources.list.d/mongodb-org-5.0.list'
+        repo: "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse"
+        state: present
+        update_cache: yes
 
-    - name: install mongo db
-      apt: name=mongodb-org
-      notify:
-      - start mongodb
+    - name: "Install MongoDB"
+      apt: 
+        name: mongodb-org
+        state: present
+        # update_cache: yes
+  handlers:
+  - name: start mongodb
+    service: name=mongod state=started
