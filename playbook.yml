@@ -1,0 +1,37 @@
+- name: Update web servers
+  hosts: appservers
+  become: true
+  tasks:
+  - name: Clone github repository
+    git:
+      repo: https://github.com/AlejandroPM96/mongo-sample.git
+      dest: /home/app/
+      clone: yes
+      update: yes
+  - name: install pip3
+    apt: name=python3-pip state=present update_cache=yes
+
+  - name: Install specified python requirements offline from a local directory with downloaded packages
+    pip:
+      requirements:  /home/app/requirements.txt
+  - name: start flask
+    shell: "nohup python /home/app/app.py &"
+    environment:
+      FLASK_APP: /home/app/app.py
+      MONGO_URI: mongodb://localhost:27017/
+
+- name: talk to all hosts just so we can learn about them
+  hosts: dbservers
+  become: true
+  tasks:
+    - name: get apt key
+      apt_key: 
+        url: "https://www.mongodb.org/static/pgp/server-5.0.asc"
+
+    - name: create mongodb-org-3.2.list
+      command: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+
+    - name: install mongo db
+      apt: name=mongodb-org
+      notify:
+      - start mongodb
