@@ -4,3 +4,10 @@ echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/
 sudo apt-get update
 sudo apt-get install -y mongodb-org
 sudo service mongod start
+apt-get update
+apt-get install -y apache2
+cat <<EOF > /var/www/index.html
+<html><body><h1>Hello World</h1>
+<p>This page was created from a simple startup script!</p>
+</body></html>
+EOF

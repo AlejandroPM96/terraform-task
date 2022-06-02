@@ -15,32 +15,7 @@
     pip:
       requirements:  /home/app/requirements.txt
   - name: start flask
-    shell: "nohup python /home/app/app.py &"
+    shell: "nohup python3 /home/app/app.py &"
     environment:
       FLASK_APP: /home/app/app.py
-      MONGO_URI: mongodb://localhost:27017/
-
-- name: talk to all hosts just so we can learn about them
-  hosts: dbservers
-  become: true
-  tasks:
-    - name: "Import MongoDB public key"
-      apt_key:
-        keyserver: hkp://keyserver.ubuntu.com:80
-        id: 4B7C549A058F8B6B
-
-    - name: "Add MongoDB repository"
-      apt_repository:
-        filename: '/etc/apt/sources.list.d/mongodb-org-5.0.list'
-        repo: "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse"
-        state: present
-        update_cache: yes
-
-    - name: "Install MongoDB"
-      apt: 
-        name: mongodb-org
-        state: present
-        # update_cache: yes
-  handlers:
-  - name: start mongodb
-    service: name=mongod state=started
+      MONGO_URI: mongodb://127.0.0.1:27017/

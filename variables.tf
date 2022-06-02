@@ -1,11 +1,11 @@
 variable "project" {
   type    = string
-  default = "terraform-351519"
+  default = "terraform-project-352021"
 }
 
 variable "credentials_file" {
   type    = string
-  default = "../terraform-351519-db745207ceec.json"
+  default = "../terraform-project-352021-a4c9ee05f5a2.json"
 }
 variable "ssh_key" {
   type    = string
@@ -14,7 +14,7 @@ variable "ssh_key" {
 
 variable "target_size" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "group1_region" {
@@ -39,4 +39,8 @@ variable "public_ssh" {
 variable "script_path" {
   type    = string
   default = "./startup.sh"
+}
+variable "app_script_path" {
+  type    = string
+  default = "./appStartup.sh"
 }

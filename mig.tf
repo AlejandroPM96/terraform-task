@@ -18,7 +18,7 @@ module "mig1_template" {
     scopes = ["cloud-platform"]
   }
   name_prefix          = "${var.network_prefix}-group1"
-  startup_script       = file(var.script_path)
+  startup_script       = file(var.app_script_path)
   source_image_family  = "ubuntu-1804-lts"
   source_image_project = "ubuntu-os-cloud"
   tags = [
@@ -66,7 +66,8 @@ module "mig2_template" {
   tags = [
     "${var.network_prefix}-group1",
     module.cloud-nat-group1.router_name,
-    "allow-ssh"
+    "allow-ssh",
+    "group2"
   ]
   metadata = {
     ssh-keys = var.public_ssh
@@ -79,7 +80,7 @@ module "mig2" {
   instance_template = module.mig2_template.self_link
   region            = var.group1_region
   hostname          = "${var.network_prefix}-group2"
-  target_size       = var.target_size
+  target_size       = 1
   named_ports = [{
     name = "http",
     port = 80
