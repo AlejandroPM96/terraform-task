@@ -150,7 +150,10 @@ resource "google_compute_instance" "default" {
     }
   }
   metadata_startup_script = file("jump_script.sh")
-
+  metadata = {
+    GOOGLE_APPLICATION_CREDENTIALS=file("../terraform-project-352021-a4c9ee05f5a2.json"),
+    ssh-keys = var.public_ssh
+  }
   network_interface {
     network    = var.network_prefix
     subnetwork = "${var.network_prefix}-group1"
@@ -162,13 +165,18 @@ resource "google_compute_instance" "default" {
 }
 resource "google_compute_firewall" "rules" {
   depends_on = [
-    google_compute_subnetwork.group1
+    google_compute_subnetwork.group1,
+    
   ]
   name    = "allow-ssh"
   network = var.network_prefix
   allow {
     protocol = "tcp"
     ports    = ["22"]
+  }
+  allow {
+    ports    = ["80"]
+    protocol = "tcp"
   }
   target_tags   = ["jump-server"]
   source_ranges = ["0.0.0.0/0"]
@@ -191,4 +199,7 @@ resource "google_compute_firewall" "allow_ssh" {
 
 output "load-balancer-ip" {
   value = module.gce-lb-http.external_ip
+}
+output "jumpserver-ip" {
+  value = google_compute_instance.default.network_interface.0.access_config.0.nat_ip
 }

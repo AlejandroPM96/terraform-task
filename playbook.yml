@@ -19,3 +19,24 @@
     environment:
       FLASK_APP: /home/app/app.py
       MONGO_URI: mongodb://127.0.0.1:27017/
+  
+  - name: enable proxy http
+    shell: "a2enmod proxy proxy_http"
+  
+  - name: creating apache page details
+    shell: |
+      cat <<EOF > /etc/apache2/sites-available/34.111.105.33.conf
+      <VirtualHost *:80>
+        ServerName 34.111.105.33
+
+        ProxyPreserveHost On
+        ProxyPass / http://localhost:8080/
+        ProxyPassReverse / http://localhost:8080/
+      </VirtualHost>
+    args:
+      creates: "/etc/apache2/sites-available/34.111.105.33.conf"
+  
+  - name: enable page
+    shell: |
+      a2ensite 34.111.105.33
+      systemctl restart apache2 
