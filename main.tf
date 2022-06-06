@@ -200,6 +200,3 @@ resource "google_compute_firewall" "allow_ssh" {
 output "load-balancer-ip" {
   value = module.gce-lb-http.external_ip
 }
-output "jumpserver-ip" {
-  value = google_compute_instance.default.network_interface.0.access_config.0.nat_ip
-}
