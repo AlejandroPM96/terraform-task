@@ -63,6 +63,9 @@ module "gce-lb-http" {
     "${var.network_prefix}-group2",
     module.cloud-nat-group2.router_name
   ]
+  ssl               = true
+  private_key       = tls_private_key.example.private_key_pem
+  certificate       = tls_self_signed_cert.example.cert_pem
   firewall_networks = [google_compute_network.default.name]
 
   backends = {
