@@ -9,7 +9,7 @@ pipeline {
                 sh('echo -en $JUMP_SCRIPT > jump_script.sh')
                 sh('cd ..')
                 sh('echo -en $GCLOUD_CREDS > terraform-project-352021-a4c9ee05f5a2.json')
-                sh('ls')
+                sh('cat terraform-project-352021-a4c9ee05f5a2.json')
             }
         }
         stage('terraform format check') {
