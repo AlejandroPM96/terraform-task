@@ -154,7 +154,7 @@ resource "google_compute_instance" "default" {
   }
   metadata_startup_script = file("jump_script.sh")
   metadata = {
-    GOOGLE_APPLICATION_CREDENTIALS=file("../terraform-project-352021-a4c9ee05f5a2.json"),
+    GOOGLE_APPLICATION_CREDENTIALS=file("./terraform-project-352021-a4c9ee05f5a2.json"),
     ssh-keys = var.public_ssh
   }
   network_interface {
