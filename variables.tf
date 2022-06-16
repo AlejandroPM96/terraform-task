@@ -5,7 +5,7 @@ variable "project" {
 
 variable "credentials_file" {
   type    = string
-  default = "../terraform-project-352021-a4c9ee05f5a2.json"
+  default = "./terraform-project-352021-a4c9ee05f5a2.json"
 }
 variable "ssh_key" {
   type    = string
