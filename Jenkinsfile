@@ -36,10 +36,10 @@ pipeline {
         //         sh('terraform apply --auto-approve')
         //     }
         // }
-        post {
+    }
+    post {
             always{
                 archiveArtifacts artifacts: '*.yml', fingerprint: true
             }
-        }
     }
 }
