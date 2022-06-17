@@ -31,11 +31,11 @@ pipeline {
                 sh('terraform validate')
             }
         }
-        stage('terraform apply') {
-            steps{
-                sh('terraform apply --auto-approve')
-            }
-        }
+        // stage('terraform apply') {
+        //     steps{
+        //         sh('terraform apply --auto-approve')
+        //     }
+        // }
     }
     post {
             always{
