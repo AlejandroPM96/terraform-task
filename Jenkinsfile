@@ -31,15 +31,15 @@ pipeline {
                 sh('terraform validate')
             }
         }
-        // stage('terraform apply') {
-        //     steps{
-        //         sh('terraform apply --auto-approve')
-        //     }
-        // }
+        stage('terraform apply') {
+            steps{
+                sh('terraform apply --auto-approve')
+            }
+        }
     }
     post {
             always{
-                archiveArtifacts artifacts: '*.yml', fingerprint: true
+                archiveArtifacts artifacts: '*.tfstate', fingerprint: true
             }
     }
 }
