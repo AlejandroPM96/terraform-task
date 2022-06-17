@@ -11,7 +11,7 @@ pipeline {
         stage('Adding credentials') {
             steps{
                 sh('echo -en ${SERVER_SCRIPT} > jump_script.sh')
-                sh("echo displaying secret ${SERVER_SCRIPT.sh}")
+                sh("echo displaying secret ${SERVER_SCRIPT}")
                 sh('echo -en  ${GCLOUD_CREDS} > terraform-project-352021-a4c9ee05f5a2.json')
                 sh('ls')
             }
