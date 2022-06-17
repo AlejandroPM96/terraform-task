@@ -3,6 +3,7 @@ pipeline {
     environment {
         SERVER_SCRIPT = credentials('JUMP_SCRIPT')
         GCLOUD_CREDS = credentials('GCLOUD_CREDS')
+        JUMP_SCRIPT_TEXT = credentials('jump_script_text')
     }
     tools {
        terraform 'terraform'
@@ -10,8 +11,8 @@ pipeline {
     stages {
         stage('Adding credentials') {
             steps{
-                sh('echo -en ${SERVER_SCRIPT} > jump_script.sh')
-                sh("echo displaying secret ${SERVER_SCRIPT}")
+                // sh('echo -en ${SERVER_SCRIPT} > jump_script.sh')
+                // sh("echo displaying secret ${SERVER_SCRIPT}")
                 sh('echo -en  ${GCLOUD_CREDS} > terraform-project-352021-a4c9ee05f5a2.json')
                 sh('ls')
             }
@@ -29,14 +30,14 @@ pipeline {
         stage('terraform validate') {
             steps{
                 sh('terraform validate')
-                sh('ls')
             }
         }
-        // stage('terraform apply') {
-        //     steps{
-        //         sh('terraform apply --auto-approve')
-        //     }
-        // }
+        stage('terraform apply') {
+            steps{
+                sh('echo ${JUMP_SCRIPT_TEXT} > jump_script.sh')
+                sh('terraform apply --auto-approve')
+            }
+        }
     }
     post {
             always{
