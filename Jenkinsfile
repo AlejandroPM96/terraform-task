@@ -29,6 +29,7 @@ pipeline {
         stage('terraform validate') {
             steps{
                 sh('terraform validate')
+                sh('ls')
             }
         }
         // stage('terraform apply') {
