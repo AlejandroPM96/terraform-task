@@ -199,13 +199,7 @@ resource "google_compute_firewall" "allow_ssh" {
     ports    = ["22"]
   }
 }
-resource "google_storage_bucket" "static-files" {
-  name          = "tf-state-demo"
-  location      = "US"
-  force_destroy = true
 
-  uniform_bucket_level_access = true
-}
 output "load-balancer-ip" {
   value = module.gce-lb-http.external_ip
 }

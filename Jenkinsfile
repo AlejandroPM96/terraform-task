@@ -36,15 +36,6 @@ pipeline {
             steps{
                 sh('echo ${JUMP_SCRIPT_TEXT} > jump_script.sh')
                 sh('terraform apply --auto-approve')
-                sh('cat terraform.tfstate')
-            }
-        }
-        stage('pushing state to bucket') {
-            steps{
-                withCredentials([file(credentialsId: 'GCLOUD_CREDS', variable: 'GC_KEY')]) {
-                    sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
-                    sh("gsutil cp terraform.tfstate gs://tf-state-demo/")
-                }
             }
         }
     }
