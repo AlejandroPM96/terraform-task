@@ -44,6 +44,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'GCLOUD_CREDS', variable: 'GC_KEY')]) {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                     sh("gsutil cp terraform.tfstate gs://tf-state-demo/")
+                }
             }
         }
     }
